@@ -1,67 +1,130 @@
-var SIZE = 250;
-$(document).ready(function(){
-  var canvas = document.getElementById("bCanvas");
-  canvas.width=SIZE;
-  canvas.height=SIZE;
-  var ctx = canvas.getContext('2d');
-  
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = "#ff0000";
+var clsImage;
+		var iCropLeft, iCropTop, iCropWidth, iCropHeight;
+		var rect;
+		// 로컬 이미지 파일을 Canvas 에 로드한다.
+		function LoadImage()
+		{
+			if( typeof window.FileReader !== 'function' )
+			{
+				alert("FileReader is not supported");
+				return;
+			}
 
-  var sX,sY,cX,cY;
-  var width, height;
-  var canvasX = $("#bCanvas").offset().left;
-  var canvasY = $("#bCanvas").offset().top;
-  var draw = false;
-  
-  // click 시 draw 시작
-  $("#bCanvas").mousedown(function(e){
-    sX=parseInt(e.clientX-canvasX);
-    sY=parseInt(e.clientY-canvasY);
-    draw = true;
-  })
-  $("#bCanvas").mousemove(function(e){
-    if(draw){
-      cX=parseInt(e.clientX-canvasX);
-      cY=parseInt(e.clientY-canvasY);
-      ctx.clearRect(0,0,canvas.width,canvas.height); //clear canvas
-      ctx.strokeRect(sX,sY,cX-sX,cY-sY);
-    }
-  })
-  // 마우스 놓으면 rectangle 완성 및 popup 생성
-  $("#bCanvas").mouseup(function(e){
-    draw = false;
-    
-    // 일정 크기 이상의 사각형일때 crop
-    var threshold = 10;
-    if(Math.abs(cX-sX)>threshold&&Math.abs(cY-sY)>threshold){
-    	drawCanvas(sX,sY,cX-sX,cY-sY);
-    }
-  })
-});
+			var inputFile = document.getElementById('image_file');
+			var clsFileReader = new FileReader();
+			clsFileReader.onload = function(){
+				clsImage = new Image();
+				clsImage.onload = function(){
+					var canvas = document.getElementById("canvas");
+					canvas.width = clsImage.width;
+					canvas.height = clsImage.height;
+					rect = canvas.getBoundingClientRect()
+						
+					iCropLeft = 0;
+					iCropTop = 0;
+					iCropWidth = clsImage.width;
+					iCropHeight = clsImage.height;
+					iImageWidth = clsImage.width;
+					iImageHeight = clsImage.height;
 
-function drawCanvas (x,y,width,height){
-	$("#aDiv").children().remove();
-  var canvas = document.createElement("canvas");
-  var img = new window.Image();
-  
-  
-  var w,h;
+					DrawCropRect();
+					AddCropMoveEvent();
+				};
 
-  if(Math.abs(width)<=Math.abs(height)){
-    h = SIZE;
-    w = h*width/height;
-  } else {
-    w = SIZE;
-    h = w*height/width;
-  }
-  canvas.width = w;
-  canvas.height = h;
-  
-  img.addEventListener("load", function () {
-  	var RATE = img.width/250;
-    canvas.getContext('2d').drawImage(img, x*RATE, y*RATE, width*RATE, height*RATE, (w-w*0.9)/2, (h-h*0.9)/2, w*0.9, h*0.9);
-    },false);
-  img.src = "https://user-images.githubusercontent.com/25702775/109247653-a1e30700-7827-11eb-887c-8811a2df6671.jpg";
-  $("#aDiv").append(canvas);
-}
+				clsImage.src = clsFileReader.result;
+			};
+
+			clsFileReader.readAsDataURL(inputFile.files[0]);
+		}
+
+		// 로컬 이미지 파일과 Crop 을 위한 사각형 박스를 그려준다.
+		function DrawCropRect()
+		{
+			var canvas = document.getElementById("canvas");
+			var ctx = canvas.getContext("2d");
+
+			ctx.drawImage( clsImage, 0, 0 );
+
+			ctx.strokeStyle = "#ff0000";
+			ctx.beginPath();
+			ctx.rect(iCropLeft,iCropTop,iCropWidth,iCropHeight);
+			ctx.stroke();
+			// console.log("Origin", iCropLeft,iCropTop);
+			// console.log("rect", iCropWidth, iCropHeight);
+
+		}
+
+		// 이미지를 crop 하여서 하단 Canvas 에 그려준다.
+		function CropImage()
+		{
+			var canvas = document.getElementById("canvas");
+
+			img = new Image();
+			img.onload = function(){
+				var canvas = document.getElementById("canvas_crop");
+				canvas.width = iCropWidth;
+				canvas.height = iCropHeight;
+				var ctx = canvas.getContext("2d");
+				ctx.drawImage( img, iCropLeft, iCropTop, iCropWidth, iCropHeight, 0, 0, iCropWidth, iCropHeight );
+			};
+
+			img.src = canvas.toDataURL();
+		}
+
+		// 마우스 이동에 따른 Crop 사각 박스을 이동하기 위한 이벤트 핸들러를 등록한다.
+		function AddCropMoveEvent()
+		{
+			var canvas = document.getElementById("canvas");
+			var bDrag = false;
+			var iOldX, iOldY;
+
+			canvas.onmousedown = function(e){
+				// 화면 그리기 모드를 초기화하고 마우스 좌표 저장
+				bDrag = true;
+				iOldX = e.offsetX * (iImageWidth/rect.width);
+				iOldY = e.offsetY * (iImageHeight/rect.height);
+                iNewX = e.offsetX * (iImageWidth/rect.width); // 화면 기준 X
+                iNewY = e.offsetY * (iImageHeight/rect.height); // 화면 기준 Y
+			};
+
+			canvas.onmousemove = function(e){
+				if( bDrag == false ) return;
+
+				// 새로운 좌표
+				var iX = e.offsetX * (iImageWidth/rect.width);
+				var iY = e.offsetY * (iImageHeight/rect.height);
+				
+				// 가로 좌표 저장
+				iCropLeft = iOldX;
+                iCropWidth = iX - iOldX;
+                iNewX = iX;
+				if( iCropLeft < 0 )
+				{
+					iCropLeft = 0;
+				}
+				else if( iCropLeft + iCropWidth > clsImage.width )
+				{	
+					iCropWidth = clsImage.width - iCropLeft;
+				}
+
+				iCropTop = iOldY;
+                iCropHeight = iY - iOldY;
+                iNewY = iY;
+				if( iCropTop < 0 )
+				{
+					iCropTop = 0;
+				}
+				else if( iCropTop + iCropHeight > clsImage.height )
+				{
+					iCropHeight = clsImage.height - iCropTop;
+				}
+
+				// console.log("Origin", iCropLeft,iCropTop);
+				// console.log("rect", iCropWidth, iCropHeight);
+				DrawCropRect();
+			};
+
+			canvas.onmouseup = function(e){
+				bDrag = false;
+			};
+		}

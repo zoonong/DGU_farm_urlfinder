@@ -1,6 +1,6 @@
 var clsImage;
 		var iCropLeft, iCropTop, iCropWidth, iCropHeight;
-
+		var rect;
 		// 로컬 이미지 파일을 Canvas 에 로드한다.
 		function LoadImage()
 		{
@@ -18,11 +18,12 @@ var clsImage;
 					var canvas = document.getElementById("canvas");
 					canvas.width = clsImage.width;
 					canvas.height = clsImage.height;
-
-					iCropLeft = 50;
-					iCropTop = 50;
-					iCropWidth = clsImage.width - 200;
-					iCropHeight = clsImage.height - 200;
+					rect = canvas.getBoundingClientRect()
+						
+					iCropLeft = 0;
+					iCropTop = 0;
+					iCropWidth = clsImage.width;
+					iCropHeight = clsImage.height;
 					iImageWidth = clsImage.width;
 					iImageHeight = clsImage.height;
 
@@ -46,8 +47,11 @@ var clsImage;
 
 			ctx.strokeStyle = "#ff0000";
 			ctx.beginPath();
-			ctx.rect( iCropLeft, iCropTop, iCropWidth, iCropHeight );
+			ctx.rect(iCropLeft,iCropTop,iCropWidth,iCropHeight);
 			ctx.stroke();
+			// console.log("Origin", iCropLeft,iCropTop);
+			// console.log("rect", iCropWidth, iCropHeight);
+
 		}
 
 		// 이미지를 crop 하여서 하단 Canvas 에 그려준다.
@@ -73,24 +77,24 @@ var clsImage;
 			var canvas = document.getElementById("canvas");
 			var bDrag = false;
 			var iOldX, iOldY;
-			var iCropLeftOld, iCropTopOld;
 
 			canvas.onmousedown = function(e){
+				// 화면 그리기 모드를 초기화하고 마우스 좌표 저장
 				bDrag = true;
-				iOldX = e.offsetX;
-				iOldY = e.offsetY;
-                iNewX = e.offsetX;
-                iNewY = e.offsetY;
-				iCropLeftOld = iCropLeft;
-				iCropTopOld = iCropTop;
+				iOldX = e.offsetX * (iImageWidth/rect.width);
+				iOldY = e.offsetY * (iImageHeight/rect.height);
+                iNewX = e.offsetX * (iImageWidth/rect.width); // 화면 기준 X
+                iNewY = e.offsetY * (iImageHeight/rect.height); // 화면 기준 Y
 			};
 
 			canvas.onmousemove = function(e){
 				if( bDrag == false ) return;
 
-				var iX = e.offsetX;
-				var iY = e.offsetY;
-
+				// 새로운 좌표
+				var iX = e.offsetX * (iImageWidth/rect.width);
+				var iY = e.offsetY * (iImageHeight/rect.height);
+				
+				// 가로 좌표 저장
 				iCropLeft = iOldX;
                 iCropWidth = iX - iOldX;
                 iNewX = iX;
@@ -99,8 +103,8 @@ var clsImage;
 					iCropLeft = 0;
 				}
 				else if( iCropLeft + iCropWidth > clsImage.width )
-				{
-					iCropLeft = clsImage.width - iCropWidth;
+				{	
+					iCropWidth = clsImage.width - iCropLeft;
 				}
 
 				iCropTop = iOldY;
@@ -112,9 +116,11 @@ var clsImage;
 				}
 				else if( iCropTop + iCropHeight > clsImage.height )
 				{
-					iCropTop = clsImage.height - iCropHeight;
+					iCropHeight = clsImage.height - iCropTop;
 				}
 
+				// console.log("Origin", iCropLeft,iCropTop);
+				// console.log("rect", iCropWidth, iCropHeight);
 				DrawCropRect();
 			};
 
