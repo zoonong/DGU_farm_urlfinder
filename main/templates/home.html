@@ -2,11 +2,164 @@
 {% load static %}
 
 {% block content %}
-<input type='file' id='image_file' />
-	<input type='button' value='Load' onclick='LoadImage();' />
-	<canvas id="canvas"></canvas>
 
-	<input type='button' value='Crop' onclick='CropImage();' />
-	<canvas id="canvas_crop"></canvas>
+ <!-- Page Wrapper -->
+	<div id="wrapper">
 
+		<!-- Sidebar -->
+		<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+			<!-- Sidebar - Brand -->
+			<a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'home' %}">
+				<div class="sidebar-brand-icon rotate-n-15">
+					<i class="fas fa-laugh-wink"></i>
+				</div>
+				<div class="sidebar-brand-text mx-3">URL FINDER</div>
+			</a>
+
+			<!-- Divider -->
+			<hr class="sidebar-divider my-0">
+
+			<!-- Nav Item - Dashboard -->
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'home' %}">
+					<i class="fas fa-fw fa-tachometer-alt"></i>
+					<span>TEAM DOBIES</span></a>
+			</li>
+
+			<!-- Divider -->
+			
+
+			<!-- Divider -->
+			<hr class="sidebar-divider d-none d-md-block">
+
+			<!-- Sidebar Toggler (Sidebar) -->
+			<div class="text-center d-none d-md-inline">
+				<button class="rounded-circle border-0" id="sidebarToggle"></button>
+			</div>
+
+		</ul>
+		<!-- End of Sidebar -->
+
+		<!-- Content Wrapper -->
+		<div id="content-wrapper" class="d-flex flex-column">
+
+			<!-- Main Content -->
+			<div id="content">
+
+				<!-- Topbar -->
+				<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+					<!-- Sidebar Toggle (Topbar) -->
+					<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+						<i class="fa fa-bars"></i>
+					</button>
+
+					
+
+				</nav>
+				<!-- End of Topbar -->
+
+				<!-- Begin Page Content -->
+				<div class="container-fluid">
+					<h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+					<div class="row">
+						
+						<div class="col-lg-6">
+							<div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Basic Card Example</h6>
+                                </div>
+                                <div class="card-body">
+                                    <input type='file' id='image_file' />
+									<input type='button' value='Load' onclick='LoadImage();' />
+									<canvas id="canvas"></canvas>
+                                </div>
+                            </div>
+							
+							<!-- <input type='file' id='image_file' />
+							<input type='button' value='Load' onclick='LoadImage();' />
+							<canvas id="canvas"></canvas> -->
+						</div>
+						<div class="col-lg-6">
+							<div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Basic Card Example</h6>
+                                </div>
+                                <div class="card-body">
+                                    <input type='button' value='Crop' onclick='CropImage();' />
+									<canvas id="canvas_crop"></canvas>
+                                </div>
+                            </div>
+							<!-- <input type='button' value='Crop' onclick='CropImage();' />
+							<canvas id="canvas_crop"></canvas> -->
+						</div>
+						<!-- Page Heading -->
+						<!-- <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+						<input type='file' id='image_file' />
+						<input type='button' value='Load' onclick='LoadImage();' />
+						<canvas id="canvas"></canvas>
+
+						<input type='button' value='Crop' onclick='CropImage();' />
+						<canvas id="canvas_crop"></canvas> -->
+						<script src="{% static 'js/crop.js' %}"></script>
+
+					</div>
+
+				</div>
+				<!-- /.container-fluid -->
+
+			</div>
+			<!-- End of Main Content -->
+
+			<!-- Footer -->
+			<footer class="sticky-footer bg-white">
+				<div class="container my-auto">
+					<div class="copyright text-center my-auto">
+						<span>Copyright &copy; Your Website 2020</span>
+					</div>
+				</div>
+			</footer>
+			<!-- End of Footer -->
+
+		</div>
+		<!-- End of Content Wrapper -->
+
+	</div>
+	<!-- End of Page Wrapper -->
+
+	<!-- Scroll to Top Button-->
+	<a class="scroll-to-top rounded" href="#page-top">
+		<i class="fas fa-angle-up"></i>
+	</a>
+
+	<!-- Logout Modal-->
+	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+					<a class="btn btn-primary" href="login.html">Logout</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap core JavaScript-->
+	<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+	<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+	<!-- Core plugin JavaScript-->
+	<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+	<!-- Custom scripts for all pages-->
+	<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
 {% endblock %}
