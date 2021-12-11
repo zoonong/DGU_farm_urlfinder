@@ -12,7 +12,8 @@
 			<!-- Sidebar - Brand -->
 			<a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'home' %}">
 				<div class="sidebar-brand-icon rotate-n-15">
-					<i class="fas fa-laugh-wink"></i>
+					<i class="fas fa-laptop-code"></i>
+					<!-- <i class="fas fa-code"></i> -->
 				</div>
 				<div class="sidebar-brand-text mx-3">URL FINDER</div>
 			</a>
@@ -23,7 +24,8 @@
 			<!-- Nav Item - Dashboard -->
 			<li class="nav-item">
 				<a class="nav-link" href="{% url 'home' %}">
-					<i class="fas fa-fw fa-tachometer-alt"></i>
+					<!-- <i class="fas fa-fw fa-tachometer-alt"></i> -->
+					<i class="fas fa-hat-wizard"></i>
 					<span>TEAM DOBIES</span></a>
 			</li>
 
@@ -68,40 +70,52 @@
 						<div class="col-lg-6">
 							<div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Basic Card Example</h6>
+									
+									<a class="btn btn-info btn-icon-split">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-info-circle"></i>
+                                        </span>
+                                        <span>&nbsp;<input type='file' id='image_file' /></span>
+                                    </a>
+									
+									<a class="btn btn-primary btn-icon-split" type="button" onclick="LoadImage();">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-flag"></i>
+                                        </span>
+                                        <span class="text">LOAD</span>
+                                    </a>
+									<!-- <input type='file' id='image_file' />
+									<input type='button' value='Load' onclick='LoadImage();' /> -->
+                                    <!-- <h6 class="m-0 font-weight-bold text-primary">Basic Card Example</h6> -->
                                 </div>
-                                <div class="card-body">
-                                    <input type='file' id='image_file' />
-									<input type='button' value='Load' onclick='LoadImage();' />
+                                <div class="card-body", style="margin: 0 auto;">
 									<canvas id="canvas"></canvas>
                                 </div>
                             </div>
 							
-							<!-- <input type='file' id='image_file' />
-							<input type='button' value='Load' onclick='LoadImage();' />
-							<canvas id="canvas"></canvas> -->
+							
 						</div>
 						<div class="col-lg-6">
 							<div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Basic Card Example</h6>
+									<a class="btn btn-success btn-icon-split" type="button" onclick="CropImage();">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <span class="text">CROP</span>
+										<!-- <input type='button' value='Crop' onclick='CropImage();' /> -->
+                                    </a>
+									
+                                    <!-- <h6 class="m-0 font-weight-bold text-primary">Basic Card Example</h6> -->
                                 </div>
-                                <div class="card-body">
-                                    <input type='button' value='Crop' onclick='CropImage();' />
+                                <div class="card-body", style="margin: 0 auto;">
+                                    
 									<canvas id="canvas_crop"></canvas>
                                 </div>
                             </div>
-							<!-- <input type='button' value='Crop' onclick='CropImage();' />
-							<canvas id="canvas_crop"></canvas> -->
+							
 						</div>
-						<!-- Page Heading -->
-						<!-- <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
-						<input type='file' id='image_file' />
-						<input type='button' value='Load' onclick='LoadImage();' />
-						<canvas id="canvas"></canvas>
-
-						<input type='button' value='Crop' onclick='CropImage();' />
-						<canvas id="canvas_crop"></canvas> -->
+						
 						<script src="{% static 'js/crop.js' %}"></script>
 
 					</div>
